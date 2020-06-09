@@ -11,10 +11,20 @@ const TodoForm = ({ handleSubmit, value }) => {
   const task = useSelector((store) => store.todo?.task);
 
   const onHandleSubmit = (val) => {
-    if (task.length > 0) {
-      dispatch(addTodo([...task, { task: val.todo, status: false }]));
+    if (value) {
+      const editTask = task.map((data) => {
+        if (data.task === value) {
+          return { task: val.todo, status: false };
+        }
+        return data;
+      });
+      dispatch(addTodo(editTask));
     } else {
-      dispatch(addTodo([{ task: val.todo, status: false }]));
+      if (task?.length > 0) {
+        dispatch(addTodo([...task, { task: val.todo, status: false }]));
+      } else {
+        dispatch(addTodo([{ task: val.todo, status: false }]));
+      }
     }
     history.push("/");
   };
